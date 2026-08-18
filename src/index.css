@@ -24,11 +24,13 @@
 }
 
 html {
+  height: 100%;
   scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
 body {
+  height: 100%;
   font-family: 'Plus Jakarta Sans', sans-serif;
   background: var(--dark);
   color: #fff;
@@ -53,8 +55,29 @@ h3,
 /* Screen transitions */
 .screen {
   position: relative;
-  min-height: 100vh;
+  /* Use dynamic viewport units to avoid mobile chrome issues */
+  min-height: 100dvh;
   z-index: 1;
+}
+
+/* Scroll snap: container that wraps the full-screen sections */
+.screens-container {
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Each screen/section should snap to full viewport height */
+.screen-section {
+  height: 100dvh;
+  min-height: 100dvh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Glossy button effect */
