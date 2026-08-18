@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PhotoCard from './PhotoCard';
-import './Screen2Gallery.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,12 +36,7 @@ const PHOTOS = [
   },
 ];
 
-interface Screen2GalleryProps {
-  isPlaying?: boolean;
-  onToggleSound?: () => void;
-}
-
-export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Screen2GalleryProps) {
+export default function Screen2Gallery() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -69,11 +63,11 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
     const ctx = gsap.context(() => {
       gsap.fromTo(
         titleRef.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
+          duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: titleRef.current,
@@ -114,7 +108,7 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev]);
 
-  // Touch event handlers (strictly non-blocking for vertical scrolling)
+  // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     if (e.touches.length !== 1) return;
     touchStartPos.current = {
@@ -169,115 +163,52 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
     <section
       ref={sectionRef}
       style={{
-        minHeight: '100vh',
-        padding: 'clamp(40px, 6vw, 70px) clamp(16px, 4vw, 60px)',
+        minHeight: '100dvh',
+        height: isMobile ? '100dvh' : 'auto',
+        padding: isMobile
+          ? '16px 12px 14px'
+          : 'clamp(50px, 6vw, 80px) clamp(16px, 4vw, 60px)',
         position: 'relative',
         overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: isMobile ? 'space-between' : 'flex-start',
+        boxSizing: 'border-box',
       }}
     >
-      {/* Section header with Sound Toggle - Flexbox layout */}
+      {/* Section Header */}
       <div
         ref={titleRef}
         style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: 'clamp(16px, 3vw, 32px)',
-          marginBottom: 'clamp(30px, 5vw, 48px)',
+          textAlign: 'center',
+          marginBottom: isMobile ? '8px' : '36px',
           opacity: 0,
-          position: 'relative',
         }}
       >
-        {/* Title section */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <h2
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 'clamp(32px, 5.5vw, 60px)',
-              fontWeight: '300',
-              color: '#FAF7F2',
-              letterSpacing: '-0.01em',
-              lineHeight: '1.2',
-              margin: 0,
-              textAlign: 'center',
-            }}
-          >
-            Моменты,{' '}
-            <span style={{ fontStyle: 'italic', color: '#C9A96E' }}>
-              что вдохновляют
-            </span>
-          </h2>
-          <div
-            style={{
-              width: '60px',
-              height: '1px',
-              background: 'linear-gradient(to right, transparent, #C9A96E, transparent)',
-              margin: '18px auto 0',
-            }}
-          />
-        </div>
-
-        {/* Sound Toggle Button - Compact Circle */}
-        {onToggleSound && (
-          <button
-            onClick={onToggleSound}
-            aria-label={isPlaying ? 'Mute sound' : 'Unmute sound'}
-            className="sound-toggle-compact"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '48px',
-              height: '48px',
-              minWidth: '48px',
-              minHeight: '48px',
-              padding: 0,
-              background: 'rgba(13, 11, 15, 0.7)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(201, 169, 110, 0.4)',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              color: '#C9A96E',
-              transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-              flexShrink: 0,
-              marginTop: 'clamp(0px, 1vw, 6px)',
-            }}
-            onMouseEnter={(e) => {
-              const btn = e.currentTarget as HTMLButtonElement;
-              btn.style.background = 'rgba(13, 11, 15, 0.85)';
-              btn.style.borderColor = 'rgba(201, 169, 110, 0.7)';
-              btn.style.boxShadow = '0 0 20px rgba(201, 169, 110, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4)';
-              btn.style.transform = 'scale(1.1)';
-            }}
-            onMouseLeave={(e) => {
-              const btn = e.currentTarget as HTMLButtonElement;
-              btn.style.background = 'rgba(13, 11, 15, 0.7)';
-              btn.style.borderColor = 'rgba(201, 169, 110, 0.4)';
-              btn.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-              btn.style.transform = 'scale(1)';
-            }}
-          >
-            {/* Animated sound wave bars */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2px', height: '18px' }}>
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className={isPlaying ? 'sound-bar-animated' : ''}
-                  style={{
-                    width: '2px',
-                    height: isPlaying ? undefined : '3px',
-                    background: isPlaying ? '#C9A96E' : 'rgba(201, 169, 110, 0.5)',
-                    borderRadius: '1px',
-                    animationDelay: `${(i - 1) * 0.1}s`,
-                    transition: 'all 0.3s ease',
-                  }}
-                />
-              ))}
-            </div>
-          </button>
-        )}
+        <h2
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: isMobile ? '28px' : 'clamp(32px, 5.5vw, 60px)',
+            fontWeight: '300',
+            color: '#FAF7F2',
+            letterSpacing: '-0.01em',
+            lineHeight: '1.15',
+            margin: 0,
+          }}
+        >
+          Моменты,{' '}
+          <span style={{ fontStyle: 'italic', color: '#C9A96E' }}>
+            что вдохновляют
+          </span>
+        </h2>
+        <div
+          style={{
+            width: '45px',
+            height: '1px',
+            background: 'linear-gradient(to right, transparent, #C9A96E, transparent)',
+            margin: isMobile ? '8px auto 0' : '16px auto 0',
+          }}
+        />
       </div>
 
       {/* 3D Carousel Stage */}
@@ -292,12 +223,15 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
           position: 'relative',
           width: '100%',
           maxWidth: '1100px',
-          height: isMobile ? '420px' : '520px',
+          height: isMobile ? '46vh' : '520px',
+          minHeight: isMobile ? '290px' : '480px',
+          maxHeight: isMobile ? '380px' : '620px',
           margin: '0 auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           userSelect: 'none',
+          flexShrink: 0,
         }}
       >
         {/* Navigation Arrow Left */}
@@ -306,12 +240,12 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
           aria-label="Предыдущий кадр"
           style={{
             position: 'absolute',
-            left: isMobile ? '4px' : '20px',
+            left: isMobile ? '2px' : '20px',
             top: '50%',
             transform: 'translateY(-50%)',
             zIndex: 25,
-            width: isMobile ? '38px' : '48px',
-            height: isMobile ? '38px' : '48px',
+            width: isMobile ? '34px' : '48px',
+            height: isMobile ? '34px' : '48px',
             borderRadius: '50%',
             background: 'rgba(20, 16, 26, 0.75)',
             border: '1px solid rgba(201, 169, 110, 0.4)',
@@ -325,18 +259,8 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
             transition: 'all 0.3s ease',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(201, 169, 110, 0.25)';
-            e.currentTarget.style.borderColor = 'rgba(201, 169, 110, 0.8)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(20, 16, 26, 0.75)';
-            e.currentTarget.style.borderColor = 'rgba(201, 169, 110, 0.4)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-          }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={isMobile ? "16" : "20"} height={isMobile ? "16" : "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
@@ -347,12 +271,12 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
           aria-label="Следующий кадр"
           style={{
             position: 'absolute',
-            right: isMobile ? '4px' : '20px',
+            right: isMobile ? '2px' : '20px',
             top: '50%',
             transform: 'translateY(-50%)',
             zIndex: 25,
-            width: isMobile ? '38px' : '48px',
-            height: isMobile ? '38px' : '48px',
+            width: isMobile ? '34px' : '48px',
+            height: isMobile ? '34px' : '48px',
             borderRadius: '50%',
             background: 'rgba(20, 16, 26, 0.75)',
             border: '1px solid rgba(201, 169, 110, 0.4)',
@@ -366,18 +290,8 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
             transition: 'all 0.3s ease',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(201, 169, 110, 0.25)';
-            e.currentTarget.style.borderColor = 'rgba(201, 169, 110, 0.8)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(20, 16, 26, 0.75)';
-            e.currentTarget.style.borderColor = 'rgba(201, 169, 110, 0.4)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-          }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={isMobile ? "16" : "20"} height={isMobile ? "16" : "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
@@ -401,93 +315,73 @@ export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Scr
         })}
       </div>
 
-      {/* Quote and Pagination Combined Container */}
-      <div className="quote-pagination-wrapper">
-        {/* Pure Wish Quote under Central Photo */}
-        <div className="quote-container">
-          <div key={activeIndex} className="caption-fade">
-            <p className="quote-text">
-              «{activePhoto.quote}»
-            </p>
-          </div>
-        </div>
-
-        {/* Minimalist Pagination Dot Indicators */}
-        <div className="pagination-dots">
-          {PHOTOS.map((_, i) => {
-            const isActive = i === activeIndex;
-            return (
-              <button
-                key={i}
-                onClick={() => setActiveIndex(i)}
-                aria-label={`Перейти к кадру ${i + 1}`}
-                style={{
-                  width: isActive ? '24px' : '8px',
-                  height: '8px',
-                  borderRadius: '4px',
-                  background: isActive ? '#C9A96E' : 'rgba(255, 255, 255, 0.2)',
-                  border: isActive
-                    ? '1px solid rgba(201, 169, 110, 0.8)'
-                    : '1px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: isActive ? '0 0 12px rgba(201, 169, 110, 0.5)' : 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-                  padding: 0,
-                }}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
+      {/* Pure Wish Quote under Central Photo */}
       <div
-        className="scroll-indicator"
         style={{
+          maxWidth: '620px',
+          margin: isMobile ? '6px auto 0' : '16px auto 0',
+          textAlign: 'center',
+          minHeight: isMobile ? '48px' : '70px',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
-          gap: '6px',
-          marginTop: '36px',
+          justifyContent: 'center',
+          padding: '0 12px',
         }}
       >
-        <span
-          style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontSize: '10px',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'rgba(250,247,242,0.25)',
-          }}
-        >
-          Scroll
-        </span>
-        <div
-          style={{
-            width: '1px',
-            height: '36px',
-            background: 'linear-gradient(to bottom, rgba(201,169,110,0.4), transparent)',
-          }}
-        />
+        <div key={activeIndex} className="caption-fade">
+          <p
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: isMobile ? '16px' : 'clamp(18px, 2.2vw, 22px)',
+              lineHeight: '1.4',
+              fontStyle: 'italic',
+              color: '#FAF7F2',
+              fontWeight: '300',
+              margin: 0,
+              letterSpacing: '0.01em',
+            }}
+          >
+            «{activePhoto.quote}»
+          </p>
+        </div>
       </div>
 
-      {/* CSS Animation for sound bars */}
-      <style>{`
-        @keyframes soundBarAnimation {
-          0%, 100% {
-            height: 4px;
-            opacity: 1;
-          }
-          50% {
-            height: 12px;
-            opacity: 0.7;
-          }
-        }
-
-        .sound-bar-animated {
-          animation: soundBarAnimation 0.6s ease-in-out infinite !important;
-        }
-      `}</style>
+      {/* Minimalist Pagination Dot Indicators */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          marginTop: isMobile ? '6px' : '20px',
+          marginBottom: isMobile ? '4px' : '0',
+        }}
+      >
+        {PHOTOS.map((_, i) => {
+          const isActive = i === activeIndex;
+          return (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              aria-label={`Перейти к кадру ${i + 1}`}
+              style={{
+                width: isActive ? (isMobile ? '18px' : '24px') : '6px',
+                height: '6px',
+                borderRadius: '3px',
+                background: isActive ? '#C9A96E' : 'rgba(255, 255, 255, 0.2)',
+                border: isActive
+                  ? '1px solid rgba(201, 169, 110, 0.8)'
+                  : '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: isActive ? '0 0 10px rgba(201, 169, 110, 0.5)' : 'none',
+                cursor: 'pointer',
+                transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+                padding: 0,
+              }}
+            />
+          );
+        })}
+      </div>
     </section>
   );
-}
+                                             }
+      
