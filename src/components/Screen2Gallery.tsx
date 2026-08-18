@@ -37,7 +37,12 @@ const PHOTOS = [
   },
 ];
 
-export default function Screen2Gallery() {
+interface Screen2GalleryProps {
+  isPlaying?: boolean;
+  onToggleSound?: () => void;
+}
+
+export default function Screen2Gallery({ isPlaying = false, onToggleSound }: Screen2GalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -165,44 +170,114 @@ export default function Screen2Gallery() {
       ref={sectionRef}
       style={{
         minHeight: '100vh',
-        padding: 'clamp(60px, 8vw, 90px) clamp(16px, 4vw, 60px)',
+        padding: 'clamp(40px, 6vw, 70px) clamp(16px, 4vw, 60px)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Section header: Clean and strictly without '3D GALLERY' */}
+      {/* Section header with Sound Toggle - Flexbox layout */}
       <div
         ref={titleRef}
         style={{
-          textAlign: 'center',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          gap: 'clamp(16px, 3vw, 32px)',
           marginBottom: 'clamp(30px, 5vw, 48px)',
           opacity: 0,
+          position: 'relative',
         }}
       >
-        <h2
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(32px, 5.5vw, 60px)',
-            fontWeight: '300',
-            color: '#FAF7F2',
-            letterSpacing: '-0.01em',
-            lineHeight: '1.2',
-            margin: 0,
-          }}
-        >
-          Моменты,{' '}
-          <span style={{ fontStyle: 'italic', color: '#C9A96E' }}>
-            что вдохновляют
-          </span>
-        </h2>
-        <div
-          style={{
-            width: '60px',
-            height: '1px',
-            background: 'linear-gradient(to right, transparent, #C9A96E, transparent)',
-            margin: '18px auto 0',
-          }}
-        />
+        {/* Title section */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h2
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 'clamp(32px, 5.5vw, 60px)',
+              fontWeight: '300',
+              color: '#FAF7F2',
+              letterSpacing: '-0.01em',
+              lineHeight: '1.2',
+              margin: 0,
+              textAlign: 'center',
+            }}
+          >
+            Моменты,{' '}
+            <span style={{ fontStyle: 'italic', color: '#C9A96E' }}>
+              что вдохновляют
+            </span>
+          </h2>
+          <div
+            style={{
+              width: '60px',
+              height: '1px',
+              background: 'linear-gradient(to right, transparent, #C9A96E, transparent)',
+              margin: '18px auto 0',
+            }}
+          />
+        </div>
+
+        {/* Sound Toggle Button - Compact Circle */}
+        {onToggleSound && (
+          <button
+            onClick={onToggleSound}
+            aria-label={isPlaying ? 'Mute sound' : 'Unmute sound'}
+            className="sound-toggle-compact"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '48px',
+              height: '48px',
+              minWidth: '48px',
+              minHeight: '48px',
+              padding: 0,
+              background: 'rgba(13, 11, 15, 0.7)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(201, 169, 110, 0.4)',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              color: '#C9A96E',
+              transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+              flexShrink: 0,
+              marginTop: 'clamp(0px, 1vw, 6px)',
+            }}
+            onMouseEnter={(e) => {
+              const btn = e.currentTarget as HTMLButtonElement;
+              btn.style.background = 'rgba(13, 11, 15, 0.85)';
+              btn.style.borderColor = 'rgba(201, 169, 110, 0.7)';
+              btn.style.boxShadow = '0 0 20px rgba(201, 169, 110, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4)';
+              btn.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              const btn = e.currentTarget as HTMLButtonElement;
+              btn.style.background = 'rgba(13, 11, 15, 0.7)';
+              btn.style.borderColor = 'rgba(201, 169, 110, 0.4)';
+              btn.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+              btn.style.transform = 'scale(1)';
+            }}
+          >
+            {/* Animated sound wave bars */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2px', height: '18px' }}>
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className={isPlaying ? 'sound-bar-animated' : ''}
+                  style={{
+                    width: '2px',
+                    height: isPlaying ? undefined : '3px',
+                    background: isPlaying ? '#C9A96E' : 'rgba(201, 169, 110, 0.5)',
+                    borderRadius: '1px',
+                    animationDelay: `${(i - 1) * 0.1}s`,
+                    transition: 'all 0.3s ease',
+                  }}
+                />
+              ))}
+            </div>
+          </button>
+        )}
       </div>
 
       {/* 3D Carousel Stage */}
@@ -326,23 +401,12 @@ export default function Screen2Gallery() {
         })}
       </div>
 
-      {/* Quote and Pagination Container - Combined with reduced mobile margin */}
-      <div className="quote-pagination-container">
+      {/* Quote and Pagination Combined Container */}
+      <div className="quote-pagination-wrapper">
         {/* Pure Wish Quote under Central Photo */}
-        <div className="quote-wrapper">
+        <div className="quote-container">
           <div key={activeIndex} className="caption-fade">
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 'clamp(17px, 2.4vw, 22px)',
-                lineHeight: '1.65',
-                fontStyle: 'italic',
-                color: '#FAF7F2',
-                fontWeight: '300',
-                margin: 0,
-                letterSpacing: '0.01em',
-              }}
-            >
+            <p className="quote-text">
               «{activePhoto.quote}»
             </p>
           </div>
@@ -406,6 +470,24 @@ export default function Screen2Gallery() {
           }}
         />
       </div>
+
+      {/* CSS Animation for sound bars */}
+      <style>{`
+        @keyframes soundBarAnimation {
+          0%, 100% {
+            height: 4px;
+            opacity: 1;
+          }
+          50% {
+            height: 12px;
+            opacity: 0.7;
+          }
+        }
+
+        .sound-bar-animated {
+          animation: soundBarAnimation 0.6s ease-in-out infinite !important;
+        }
+      `}</style>
     </section>
   );
 }
