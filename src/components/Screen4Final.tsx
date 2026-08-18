@@ -319,7 +319,7 @@ export default function Screen4Final() {
               margin: 0,
             }}
           >
-            Сделано с любовью и восхищением ✦
+            Сделано с уважением и восхищением ✦
           </p>
         </div>
       </div>
