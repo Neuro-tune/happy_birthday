@@ -249,6 +249,7 @@ export default function Screen4Final() {
     <section
       ref={sectionRef}
       id="grand-wish"
+      className="screen-section"
       style={{
         minHeight: '100vh',
         display: 'flex',
@@ -380,7 +381,7 @@ export default function Screen4Final() {
               marginBottom: '28px',
             }}
           >
-            Пусть этот год откроет новые горизонты, принесет бесконечный поток вдохновения, гармонии и самых ярких эмоций. Желаем, чтобы каждый день был наполнен красотой, безупречным стилем и исполнением самых смелых идей!
+            Пусть этот год откроет новые горизонты, принесет бесконечный поток вдохновения, гармонии и самых яр[...]
           </p>
 
           {/* Divider */}
