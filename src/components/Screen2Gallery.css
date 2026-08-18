@@ -1,0 +1,84 @@
+/* Mobile-first responsive styles for Screen2Gallery */
+
+.quote-pagination-container {
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.quote-wrapper {
+  min-height: 75px;
+  margin-bottom: 16px;
+}
+
+.pagination-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Mobile optimization: reduce spacing on devices <= 768px */
+@media (max-width: 768px) {
+  .quote-pagination-container {
+    margin-top: 8px;
+    margin-bottom: 0;
+    padding: 0 16px;
+  }
+
+  .quote-wrapper {
+    min-height: auto;
+    margin-bottom: 12px;
+  }
+
+  .pagination-dots {
+    margin-top: 8px;
+  }
+}
+
+/* Extra small devices optimization */
+@media (max-width: 480px) {
+  .quote-pagination-container {
+    margin-top: 4px;
+  }
+
+  .quote-wrapper {
+    margin-bottom: 10px;
+  }
+
+  .pagination-dots {
+    margin-top: 6px;
+    gap: 8px;
+  }
+}
+
+/* Desktop layout */
+@media (min-width: 769px) {
+  .quote-pagination-container {
+    margin-top: 24px;
+  }
+
+  .quote-wrapper {
+    margin-bottom: 24px;
+  }
+
+  .pagination-dots {
+    margin-top: 24px;
+  }
+}
+
+/* Scroll indicator responsive */
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 36px;
+}
+
+@media (max-width: 480px) {
+  .scroll-indicator {
+    margin-top: 16px;
+  }
+}
