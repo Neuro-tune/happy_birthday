@@ -176,32 +176,49 @@ export default function Screen2Gallery() {
         boxSizing: 'border-box',
       }}
     >
-      {/* Section Header */}
+            {/* Section Header */}
       <div
         ref={titleRef}
         style={{
           textAlign: 'center',
           marginBottom: isMobile ? '8px' : '36px',
+          padding: isMobile ? '0 50px' : '0', // Защитный отступ от кнопки звука справа
           opacity: 0,
         }}
       >
         <h2
           style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: isMobile ? '28px' : 'clamp(32px, 5.5vw, 60px)',
+            fontSize: isMobile ? '26px' : 'clamp(32px, 5.5vw, 60px)',
             fontWeight: '300',
             color: '#FAF7F2',
             letterSpacing: '-0.01em',
-            lineHeight: '1.15',
+            lineHeight: isMobile ? '1.1' : '1.2',
             margin: 0,
           }}
         >
-          Моменты,{' '}
-          <span style={{ fontStyle: 'italic', color: '#C9A96E' }}>
-            что вдохновляют
+          Моменты,
+          <span
+            style={{
+              display: isMobile ? 'block' : 'inline', // На мобилке переносит на новую строку
+              fontStyle: 'italic',
+              color: '#C9A96E',
+              marginTop: isMobile ? '2px' : '0',
+            }}
+          >
+            {' '}что вдохновляют
           </span>
         </h2>
         <div
+          style={{
+            width: '45px',
+            height: '1px',
+            background: 'linear-gradient(to right, transparent, #C9A96E, transparent)',
+            margin: isMobile ? '6px auto 0' : '16px auto 0',
+          }}
+        />
+      </div>
+
           style={{
             width: '45px',
             height: '1px',
