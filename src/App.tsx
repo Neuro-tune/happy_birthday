@@ -113,8 +113,9 @@ export default function App() {
       )}
 
       {/* Main content — PRE-MOUNTED for shader warmup, hidden until started */}
-      <div
+      <main
         ref={mainRef}
+        className="screens-container"
         style={{
           opacity: 0,
           position: 'relative',
@@ -122,22 +123,38 @@ export default function App() {
           pointerEvents: isStarted ? 'auto' : 'none',
         }}
       >
-        <main className="screens-container">
-          {/* Screen 2: Gallery */}
-          <Screen2Gallery />
+        {/* Screen 2: Gallery */}
+        <Screen2Gallery />
 
-          {/* Screen 3: Wish Roulette */}
-          <Screen3WishRoulette />
+        {/* Screen 3: Wish Roulette */}
+        <Screen3WishRoulette />
 
-          {/* Screen 4: Final */}
-          <Screen4Final />
-        </main>
-      </div>
+        {/* Screen 4: Final */}
+        <Screen4Final />
+      </main>
 
       {/* Screen 1: Landing — on top, removed from DOM after crossfade */}
       {landingVisible && (
         <Screen1Landing onStart={handleStart} />
       )}
+    </div>
+  );
+}
+
+function SectionDivider() {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0 clamp(20px, 5vw, 80px)',
+      maxWidth: '1200px',
+      margin: '0 auto',
+    }}>
+      <div style={{
+        flex: 1,
+        height: '1px',
+        background: 'linear-gradient(to right, transparent, rgba(201,169,110,0.15), transparent)',
+      }} />
     </div>
   );
 }
