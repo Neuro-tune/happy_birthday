@@ -160,8 +160,8 @@ export default function Screen3WishRoulette() {
     <section
       ref={sectionRef}
       id="wish-generator"
+      className="screen-section"
       style={{
-        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
