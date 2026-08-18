@@ -329,7 +329,7 @@ export default function Screen2Gallery() {
       <div
         style={{
           maxWidth: '620px',
-          margin: '10px auto 0',
+          margin: '5px auto 0',
           textAlign: 'center',
           minHeight: '75px',
         }}
