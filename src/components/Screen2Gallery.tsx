@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PhotoCard from './PhotoCard';
+import './Screen2Gallery.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -325,66 +326,54 @@ export default function Screen2Gallery() {
         })}
       </div>
 
-      {/* Pure Wish Quote under Central Photo */}
-      <div
-        style={{
-          maxWidth: '620px',
-          margin: '0px auto 0',
-          textAlign: 'center',
-          minHeight: '75px',
-        }}
-      >
-        <div key={activeIndex} className="caption-fade">
-          <p
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 'clamp(17px, 2.4vw, 22px)',
-              lineHeight: '1.65',
-              fontStyle: 'italic',
-              color: '#FAF7F2',
-              fontWeight: '300',
-              margin: 0,
-              letterSpacing: '0.01em',
-            }}
-          >
-            «{activePhoto.quote}»
-          </p>
-        </div>
-      </div>
-
-      {/* Minimalist Pagination Dot Indicators */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '10px',
-          marginTop: '24px',
-        }}
-      >
-        {PHOTOS.map((_, i) => {
-          const isActive = i === activeIndex;
-          return (
-            <button
-              key={i}
-              onClick={() => setActiveIndex(i)}
-              aria-label={`Перейти к кадру ${i + 1}`}
+      {/* Quote and Pagination Container - Combined with reduced mobile margin */}
+      <div className="quote-pagination-container">
+        {/* Pure Wish Quote under Central Photo */}
+        <div className="quote-wrapper">
+          <div key={activeIndex} className="caption-fade">
+            <p
               style={{
-                width: isActive ? '24px' : '8px',
-                height: '8px',
-                borderRadius: '4px',
-                background: isActive ? '#C9A96E' : 'rgba(255, 255, 255, 0.2)',
-                border: isActive
-                  ? '1px solid rgba(201, 169, 110, 0.8)'
-                  : '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: isActive ? '0 0 12px rgba(201, 169, 110, 0.5)' : 'none',
-                cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-                padding: 0,
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 'clamp(17px, 2.4vw, 22px)',
+                lineHeight: '1.65',
+                fontStyle: 'italic',
+                color: '#FAF7F2',
+                fontWeight: '300',
+                margin: 0,
+                letterSpacing: '0.01em',
               }}
-            />
-          );
-        })}
+            >
+              «{activePhoto.quote}»
+            </p>
+          </div>
+        </div>
+
+        {/* Minimalist Pagination Dot Indicators */}
+        <div className="pagination-dots">
+          {PHOTOS.map((_, i) => {
+            const isActive = i === activeIndex;
+            return (
+              <button
+                key={i}
+                onClick={() => setActiveIndex(i)}
+                aria-label={`Перейти к кадру ${i + 1}`}
+                style={{
+                  width: isActive ? '24px' : '8px',
+                  height: '8px',
+                  borderRadius: '4px',
+                  background: isActive ? '#C9A96E' : 'rgba(255, 255, 255, 0.2)',
+                  border: isActive
+                    ? '1px solid rgba(201, 169, 110, 0.8)'
+                    : '1px solid rgba(255, 255, 255, 0.08)',
+                  boxShadow: isActive ? '0 0 12px rgba(201, 169, 110, 0.5)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+                  padding: 0,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {/* Scroll indicator */}
